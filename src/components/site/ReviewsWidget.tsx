@@ -10,7 +10,7 @@ export function ReviewsWidget() {
   const [expanded, setExpanded] = useState(false);
   const [i, setI] = useState(0);
   const n = feed.reviews.length;
-  const r = feed.reviews[i];
+  const r = feed.reviews[i]!;
   const prev = () => setI((i - 1 + n) % n);
   const next = () => setI((i + 1) % n);
 

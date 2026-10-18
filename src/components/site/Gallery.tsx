@@ -21,7 +21,7 @@ export function Gallery({ items }: { items: Photo[] }) {
   }, [open, close, step]);
 
   const view = (i: number) => {
-    if (items[i].advisory && !revealed[i]) { setRevealed({ ...revealed, [i]: true }); return; }
+    if (items[i]?.advisory && !revealed[i]) { setRevealed({ ...revealed, [i]: true }); return; }
     setOpen(i);
   };
 
@@ -52,17 +52,17 @@ export function Gallery({ items }: { items: Photo[] }) {
       </ul>
 
       {open !== null && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-navy/95 fade-up" role="dialog" aria-modal="true" aria-label={items[open].title} onClick={close}>
+        <div className="fixed inset-0 z-50 flex flex-col bg-navy/95 fade-up" role="dialog" aria-modal="true" aria-label={items[open]!.title} onClick={close}>
           <div className="flex items-center justify-between p-4 text-navy-foreground">
-            <p className="text-sm font-semibold">{items[open].title} <span className="opacity-60">· {open + 1}/{items.length}</span></p>
+            <p className="text-sm font-semibold">{items[open]!.title} <span className="opacity-60">· {open + 1}/{items.length}</span></p>
             <button onClick={close} className="grid h-11 w-11 place-items-center rounded-full bg-navy-foreground/10" aria-label="Close"><X className="h-5 w-5" /></button>
           </div>
           <div className="relative flex flex-1 items-center justify-center px-4" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => step(-1)} className="absolute left-3 grid h-12 w-12 place-items-center rounded-full bg-navy-foreground/10 text-navy-foreground" aria-label="Previous photo"><ChevronLeft /></button>
-            <img key={open} src={items[open].src} alt={items[open].alt} className="max-h-[78vh] max-w-full rounded-2xl object-contain fade-up" />
+            <img key={open} src={items[open]!.src} alt={items[open]!.alt} className="max-h-[78vh] max-w-full rounded-2xl object-contain fade-up" />
             <button onClick={() => step(1)} className="absolute right-3 grid h-12 w-12 place-items-center rounded-full bg-navy-foreground/10 text-navy-foreground" aria-label="Next photo"><ChevronRight /></button>
           </div>
-          <p className="p-5 text-center text-sm text-navy-foreground/80">{items[open].caption}</p>
+          <p className="p-5 text-center text-sm text-navy-foreground/80">{items[open]!.caption}</p>
         </div>
       )}
     </>

@@ -116,7 +116,7 @@ export function ServicesGrid() {
 }
 
 export function SurgicalFacilities() {
-  const room = photos[0];
+  const room = photos[0]!;
   return (
     <section className="bg-soft">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-20 md:grid-cols-2 md:py-28">
