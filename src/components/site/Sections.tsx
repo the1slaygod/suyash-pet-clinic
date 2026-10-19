@@ -12,9 +12,10 @@ import { GoogleG, Stars } from "./Stars";
 
 const icons = { Stethoscope, Syringe, HeartPulse, Scissors, Bath, ShoppingBag };
 
-export function SectionHead({ eyebrow, title, children, center }: { eyebrow: string; title: ReactNode; children?: ReactNode; center?: boolean }) {
+export function SectionHead({ eyebrow, title, children, center, className }: { eyebrow: string; title: ReactNode; children?: ReactNode; center?: boolean; className?: string }) {
   return (
-    <div className={`mb-12 max-w-2xl ${center ? "mx-auto text-center" : ""}`}>
+    <div className={`${className ?? "mb-12"} max-w-2xl ${center ? "mx-auto text-center" : ""}`}>
+
       <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">{eyebrow}</p>
       <h2 className="mt-3 text-3xl font-semibold leading-tight sm:text-4xl md:text-5xl">{title}</h2>
       {children && <p className="mt-4 text-lg leading-relaxed text-muted-foreground">{children}</p>}
@@ -124,23 +125,11 @@ export function SurgicalFacilities() {
           <img src={room.src} alt={room.alt} loading="lazy" className="aspect-[4/5] w-full object-cover" />
         </div>
         <div>
-          <SectionHead eyebrow="Surgical centre" title="A dedicated operating room, inside the clinic">
-            Surgical cases are planned and performed in-clinic by {clinic.vet.name}, {clinic.vet.credential}.
+          <SectionHead eyebrow="Surgical centre" title="A dedicated operating room, inside the clinic" className="mb-0">
+            Surgical cases are planned and performed in-clinic by {clinic.vet.name} ({clinic.vet.credential}).
+
           </SectionHead>
-          <ul className="space-y-4">
-            {[
-              ["Overhead surgical lighting", "Multi-head LED lights over the operating table."],
-              ["Stainless steel surgical table", "Easy-to-sanitise, adjustable operating table."],
-              ["Monitoring & equipment trolley", "Patient monitor and surgical equipment beside the table."],
-              ["Separate glass-partitioned room", "The operating room is closed off from the consultation area."],
-            ].map(([t, d]) => (
-              <li key={t} className="flex gap-4 rounded-2xl bg-background p-4">
-                <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
-                <div><p className="font-bold text-navy">{t}</p><p className="text-sm text-muted-foreground">{d}</p></div>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-4 text-xs text-muted-foreground">Descriptions are based on the clinic's own photographs.</p>
+
         </div>
       </div>
     </section>
