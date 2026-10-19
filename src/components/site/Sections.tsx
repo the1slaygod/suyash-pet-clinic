@@ -126,7 +126,8 @@ export function SurgicalFacilities() {
         </div>
         <div>
           <SectionHead eyebrow="Surgical centre" title="A dedicated operating room, inside the clinic" className="mb-0">
-            Surgical cases are planned and performed in-clinic by {clinic.vet.name}, {clinic.vet.credential}.
+            Surgical cases are planned and performed in-clinic by {clinic.vet.name} ({clinic.vet.credential}).
+
           </SectionHead>
 
         </div>
