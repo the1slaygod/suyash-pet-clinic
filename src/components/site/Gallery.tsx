@@ -1,12 +1,14 @@
 import { ChevronLeft, ChevronRight, EyeOff, X } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Photo } from "@/data/clinic";
 
 export function Gallery({ items }: { items: Photo[] }) {
   const [open, setOpen] = useState<number | null>(null);
   const [revealed, setRevealed] = useState<Record<number, boolean>>({});
+  const touchStartX = useRef<number | null>(null);
   const close = useCallback(() => setOpen(null), []);
   const step = useCallback((d: number) => setOpen((o) => (o === null ? o : (o + d + items.length) % items.length)), [items.length]);
+  const activePhoto = open === null ? undefined : items[open];
 
   useEffect(() => {
     if (open === null) return;
@@ -51,18 +53,28 @@ export function Gallery({ items }: { items: Photo[] }) {
         })}
       </ul>
 
-      {open !== null && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-navy/95 fade-up" role="dialog" aria-modal="true" aria-label={items[open]!.title} onClick={close}>
+      {open !== null && activePhoto && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-navy/95 fade-up" role="dialog" aria-modal="true" aria-label={activePhoto.title} onClick={close}>
           <div className="flex items-center justify-between p-4 text-navy-foreground">
-            <p className="text-sm font-semibold">{items[open]!.title} <span className="opacity-60">· {open + 1}/{items.length}</span></p>
+            <p className="text-sm font-semibold">{activePhoto.title} <span className="opacity-60">· {open + 1}/{items.length}</span></p>
             <button onClick={close} className="grid h-11 w-11 place-items-center rounded-full bg-navy-foreground/10" aria-label="Close"><X className="h-5 w-5" /></button>
           </div>
-          <div className="relative flex flex-1 items-center justify-center px-4" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="relative flex flex-1 touch-pan-y items-center justify-center px-4"
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={(e) => { touchStartX.current = e.changedTouches[0]?.clientX ?? null; }}
+            onTouchEnd={(e) => {
+              const startX = touchStartX.current;
+              const endX = e.changedTouches[0]?.clientX;
+              touchStartX.current = null;
+              if (startX !== null && endX !== undefined && Math.abs(endX - startX) > 48) step(endX < startX ? 1 : -1);
+            }}
+          >
             <button onClick={() => step(-1)} className="absolute left-3 grid h-12 w-12 place-items-center rounded-full bg-navy-foreground/10 text-navy-foreground" aria-label="Previous photo"><ChevronLeft /></button>
-            <img key={open} src={items[open]!.src} alt={items[open]!.alt} className="max-h-[78vh] max-w-full rounded-2xl object-contain fade-up" />
+            <img key={open} src={activePhoto.src} alt={activePhoto.alt} className="max-h-[78vh] max-w-full rounded-2xl object-contain fade-up" />
             <button onClick={() => step(1)} className="absolute right-3 grid h-12 w-12 place-items-center rounded-full bg-navy-foreground/10 text-navy-foreground" aria-label="Next photo"><ChevronRight /></button>
           </div>
-          <p className="p-5 text-center text-sm text-navy-foreground/80">{items[open]!.caption}</p>
+          <p className="p-5 text-center text-sm text-navy-foreground/80">{activePhoto.caption}</p>
         </div>
       )}
     </>
