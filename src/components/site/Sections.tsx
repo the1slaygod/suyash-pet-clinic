@@ -117,20 +117,44 @@ export function ServicesGrid() {
 }
 
 export function SurgicalFacilities() {
-  const room = photos[0]!;
+  const room = photos[0];
+  if (!room) return null;
   return (
     <section className="bg-soft">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-20 md:grid-cols-2 md:py-28">
         <div className="overflow-hidden rounded-[2rem] shadow-lift">
           <img src={room.src} alt={room.alt} loading="lazy" className="aspect-[4/5] w-full object-cover" />
         </div>
-        <div>
-          <SectionHead eyebrow="Surgical centre" title="A dedicated operating room, inside the clinic" className="mb-0">
-            Surgical cases are planned and performed in-clinic by {clinic.vet.name} ({clinic.vet.credential}).
+        <SectionHead eyebrow="Surgical centre" title="A dedicated operating room, inside the clinic" className="mb-0" />
+      </div>
+    </section>
+  );
+}
 
+export function FacilitiesShowcase() {
+  const showcasePhotos = photos.slice(0, 4);
+  return (
+    <section className="bg-soft">
+      <div className="mx-auto max-w-6xl px-5 py-20 md:py-28">
+        <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
+          <SectionHead eyebrow="Inside Suyash" title="Explore our veterinary facilities" className="mb-0">
+            A closer look at the spaces supporting veterinary care at Suyash Clinic, Tilak Nagar, Chembur.
           </SectionHead>
-
+          <Link to="/facilities" className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-6 py-3 font-bold text-primary-foreground">
+            View all facilities <ArrowRight className="h-4 w-4" aria-hidden />
+          </Link>
         </div>
+        <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {showcasePhotos.map((photo) => (
+            <li key={photo.title} className="group overflow-hidden rounded-2xl border bg-card">
+              <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" className="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-[1.03]" />
+              <div className="p-4">
+                <h3 className="font-semibold">{photo.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{photo.caption}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

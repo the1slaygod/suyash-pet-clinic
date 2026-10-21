@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
-  ContactSection, GallerySection, Hero, Highlights, MeetVet, ReviewsSection, ServicesGrid, SurgicalFacilities,
+  ContactSection, FacilitiesShowcase, GallerySection, Hero, Highlights, MeetVet, ReviewsSection, ServicesGrid, SurgicalFacilities,
 } from "@/components/site/Sections";
 
 const title = "Suyash Pet's Clinic & Surgical Centre · Vet in Chembur, Mumbai";
@@ -14,6 +14,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: description },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
@@ -26,6 +28,7 @@ function Index() {
       <Highlights />
       <ServicesGrid />
       <SurgicalFacilities />
+      <FacilitiesShowcase />
       <MeetVet />
       <GallerySection />
       <ReviewsSection />
