@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "sync:reviews": "node scripts/sync-reviews.mjs"
+    "sync:reviews": "node scripts/sync-reviews.mjs",
+    "deploy": "npm run build && wrangler deploy --config .output/server/wrangler.json"
   },
   "overrides": {
     "rolldown": "1.2.1"
