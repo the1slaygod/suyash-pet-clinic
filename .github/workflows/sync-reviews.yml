@@ -1,0 +1,38 @@
+name: Sync Google Reviews Daily
+
+on:
+  schedule:
+    # Run every day at 00:00 UTC (05:30 IST)
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Reviews Sync Script
+        run: node scripts/sync-reviews.mjs
+
+      - name: Commit and push if updated
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          if [ -n "$(git status --porcelain public/reviews.json src/data/reviews-data.json)" ]; then
+            git add public/reviews.json src/data/reviews-data.json
+            git commit -m "chore: sync latest Google reviews [skip ci]"
+            git push origin main
+            echo "Successfully updated and pushed reviews.json and reviews-data.json"
+          else
+            echo "No changes in reviews data, skipping commit."
+          fi

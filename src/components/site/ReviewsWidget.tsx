@@ -6,11 +6,13 @@ import { GoogleG, Stars } from "./Stars";
 /** Floating Google reviews widget (bottom-left). Compact pill on mobile. */
 export function ReviewsWidget() {
   const feed = getReviews();
+  // Filter out any reviews below 4 stars
+  const filteredReviews = feed.reviews.filter((r) => r.rating === null || r.rating >= 4);
   const [hidden, setHidden] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [i, setI] = useState(0);
-  const n = feed.reviews.length;
-  const r = feed.reviews[i]!;
+  const n = filteredReviews.length;
+  const r = filteredReviews[i] ?? filteredReviews[0] ?? feed.reviews[0]!;
   const prev = () => setI((i - 1 + n) % n);
   const next = () => setI((i + 1) % n);
 
@@ -64,7 +66,13 @@ export function ReviewsWidget() {
             <button onClick={prev} className="grid h-8 w-8 place-items-center rounded-full border" aria-label="Previous review"><ChevronLeft className="h-4 w-4" /></button>
             <button onClick={next} className="grid h-8 w-8 place-items-center rounded-full border" aria-label="Next review"><ChevronRight className="h-4 w-4" /></button>
           </div>
-          <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Snapshot · not live</span>
+          {feed.live ? (
+            <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-600">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live Google sync
+            </span>
+          ) : (
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Snapshot · not live</span>
+          )}
         </div>
       </aside>
 
@@ -89,7 +97,7 @@ export function ReviewsWidget() {
               {feed.label}. Google-attributed excerpts reproduced by public directories; star ratings and dates shown only where the source displays them.
             </p>
             <ul className="mt-5 space-y-3">
-              {feed.reviews.map((rv) => (
+              {filteredReviews.map((rv) => (
                 <li key={rv.author} className="rounded-2xl border p-5">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="font-bold">{rv.author}</span>

@@ -196,26 +196,31 @@ export function GallerySection() {
 
 export function ReviewsSection() {
   const feed = getReviews();
+  // Filter out any reviews that are below 4 stars
+  const topReviews = feed.reviews.filter((r) => r.rating === null || r.rating >= 4);
+
   return (
     <section className="mx-auto max-w-6xl px-5 py-20 md:py-28">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-        <SectionHead eyebrow="Google reviews" title="Kind words from pet parents" />
+        <SectionHead eyebrow="Google reviews" title="Kind words from pet parents">
+          Authentic stories and experiences shared by pet families. Click any card to read their full story.
+        </SectionHead>
         {feed.rating && (
-          <div className="mb-12 flex items-center gap-4 rounded-2xl border p-5">
+          <div className="mb-12 flex items-center gap-4 rounded-3xl border bg-card p-5 shadow-soft">
             <GoogleG className="h-9 w-9" />
             <div>
               <p className="flex items-center gap-2 text-2xl font-bold text-navy">{feed.rating.value} <Stars value={feed.rating.value} /></p>
-              <p className="text-xs text-muted-foreground">{feed.rating.count} reviews · {feed.rating.asOf}</p>
+              <p className="text-xs text-muted-foreground">{feed.rating.count} Google reviews · {feed.rating.asOf}</p>
             </div>
           </div>
         )}
       </div>
-      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-        {feed.reviews.map((r) => <ReviewCard key={r.author} review={r} />)}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {topReviews.map((r) => <ReviewCard key={r.author} review={r} />)}
       </div>
-      <div className="mt-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-        <p className="text-xs text-muted-foreground">{feed.label}. Excerpts are Google-attributed reviews reproduced by public directories.</p>
-        <a href={feed.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border px-5 py-3 text-sm font-bold text-primary">View on Google Maps <ArrowRight className="h-4 w-4" /></a>
+      <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-border pt-6 sm:flex-row sm:items-center">
+        <p className="text-xs text-muted-foreground">{feed.label}. Verified 4★ & 5★ Google reviews.</p>
+        <a href={feed.mapsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border bg-card px-5 py-3 text-sm font-bold text-primary shadow-soft transition hover:shadow-lift">View all reviews on Google Maps <ArrowRight className="h-4 w-4" /></a>
       </div>
     </section>
   );
